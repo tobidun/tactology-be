@@ -52,37 +52,58 @@ export class DepartmentService {
     // Find the department by ID
     const department = await this.departmentRepository.findById(input.id);
 
-    if (!department) throw new Error("Department not found");
+    if (!department) {
+      throw new Error("Department not found");
+    }
 
     // Update the department name
     department.name = input.name;
 
     // Process subdepartments
-    const subDepartmentsToSave = await Promise.all(
+    const updatedSubDepartments = await Promise.all(
       input.subDepartments.map(async (subDepartmentData) => {
-        // Find the existing subdepartment by departmentId and name
-        const existingSubDepartment =
-          await this.subDepartmentRepository.findOne(input, subDepartmentData);
-        console.log(existingSubDepartment);
+        let subDepartment;
 
-        if (existingSubDepartment) {
-          // Overwrite the existing subdepartment's name with the new one
-          existingSubDepartment.name = subDepartmentData.name; // Assuming `newName` is provided
-          console.log(existingSubDepartment.name);
-          console.log(subDepartmentData.name);
-          return existingSubDepartment; // Return the updated subdepartment
+        if (!subDepartmentData.id) {
+          // Generate a new ID if missing (using the next available number)
+          const lastSubDepartment = await this.subDepartmentRepository.findOne({
+            where: { department: department }, // Find the last subdepartment in this department
+            order: { id: "DESC" }, // Order by ID in descending order
+          });
+
+          const newId = lastSubDepartment ? lastSubDepartment.id + 1 : 1; // Generate next ID (or start from 1)
+
+          // Create the new subdepartment object
+          subDepartment = {
+            id: newId, // Use the generated ID
+            name: subDepartmentData.name,
+            department: department, // Associate with the department
+          } as SubDepartment;
         } else {
-          // If no matching subdepartment found, return null or handle accordingly
-          return null; // This depends on whether you want to handle non-matching cases
+          // Find the existing subdepartment by ID
+          subDepartment = await this.subDepartmentRepository.findOne({
+            where: { id: subDepartmentData.id },
+          });
+
+          if (subDepartment) {
+            // Update the existing subdepartment's name
+            subDepartment.name = subDepartmentData.name;
+          } else {
+            // Handle cases where the ID is invalid or not found
+            throw new Error(
+              `SubDepartment with ID ${subDepartmentData.id} not found`
+            );
+          }
         }
+
+        return subDepartment;
       })
     );
 
-    // Remove null values (if any subdepartments were not found) and save the updated subdepartments
-    const validSubDepartmentsToSave = subDepartmentsToSave.filter(Boolean);
-    await this.subDepartmentRepository.save(validSubDepartmentsToSave);
+    // Save the updated subdepartments
+    await this.subDepartmentRepository.save(updatedSubDepartments);
 
-    // Save the updated department
+    // Save and return the updated department
     return this.departmentRepository.save(department);
   }
 

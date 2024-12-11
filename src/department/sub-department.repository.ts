@@ -21,11 +21,10 @@ export class SubDepartmentRepository {
     return this.repository.save(subDepartments);
   }
 
-  async findOne(input: any, subDepartmentData: any) {
+  async findOne(subDepartmentData: any) {
     return this.repository.findOne({
       where: {
-        department: { id: input.id },
-        name: subDepartmentData.name,
+        id: subDepartmentData.id,
       },
     });
   }

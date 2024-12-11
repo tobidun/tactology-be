@@ -41,8 +41,6 @@ let DepartmentResolver = class DepartmentResolver {
         return this.departmentService.findAll(userId);
     }
     async department(id) {
-        console.log("testing here");
-        console.log(id);
         return this.departmentService.getDepartmentById(id);
     }
     async updateDepartment(input) {

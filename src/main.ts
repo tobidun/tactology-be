@@ -7,10 +7,10 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.use(passport.initialize());
   app.enableCors({
-    origin: "http://localhost:3001", // Replace with your frontend's URL
-    credentials: true, // Enable credentials (e.g., cookies)
-    methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS", // Allowed HTTP methods
-    allowedHeaders: "Content-Type,Authorization", // Allowed headers
+    origin: "http://localhost:3001",
+    credentials: true,
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS",
+    allowedHeaders: "Content-Type,Authorization",
   });
   app.useGlobalPipes(new ValidationPipe());
   await app.listen(3000);

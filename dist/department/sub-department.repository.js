@@ -28,11 +28,10 @@ let SubDepartmentRepository = class SubDepartmentRepository {
     async save(subDepartments) {
         return this.repository.save(subDepartments);
     }
-    async findOne(input, subDepartmentData) {
+    async findOne(subDepartmentData) {
         return this.repository.findOne({
             where: {
-                department: { id: input.id },
-                name: subDepartmentData.name,
+                id: subDepartmentData.id,
             },
         });
     }

@@ -41,12 +41,9 @@ export class DepartmentResolver {
 
   @Query(() => Department)
   async department(@Args("id") id: number): Promise<Department | null> {
-    console.log("testing here");
-    console.log(id);
     return this.departmentService.getDepartmentById(id);
   }
 
-  // Mutation to update a department
   @UseGuards(JwtAuthGuard)
   @Mutation(() => Department)
   async updateDepartment(
@@ -55,7 +52,6 @@ export class DepartmentResolver {
     return this.departmentService.updateDepartment(input);
   }
 
-  // Mutation to delete a department
   @Mutation(() => Department)
   async deleteDepartment(@Args("id") id: number): Promise<void> {
     return this.departmentService.deleteDepartment(id);

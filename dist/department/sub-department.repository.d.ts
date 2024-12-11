@@ -5,5 +5,5 @@ export declare class SubDepartmentRepository {
     constructor(repository: Repository<SubDepartment>);
     create(subDepartmentData: Partial<SubDepartment>): Promise<SubDepartment>;
     save(subDepartments: any): Promise<any>;
-    findOne(input: any, subDepartmentData: any): Promise<SubDepartment | null>;
+    findOne(subDepartmentData: any): Promise<SubDepartment | null>;
 }
