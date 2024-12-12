@@ -49,47 +49,38 @@ export class DepartmentService {
   }
 
   async updateDepartment(input: UpdateDepartmentInput): Promise<Department> {
-    // Find the department by ID
     const department = await this.departmentRepository.findById(input.id);
 
     if (!department) {
       throw new Error("Department not found");
     }
-
-    // Update the department name
     department.name = input.name;
 
-    // Process subdepartments
     const updatedSubDepartments = await Promise.all(
       input.subDepartments.map(async (subDepartmentData) => {
         let subDepartment;
 
         if (!subDepartmentData.id) {
-          // Generate a new ID if missing (using the next available number)
           const lastSubDepartment = await this.subDepartmentRepository.findOne({
-            where: { department: department }, // Find the last subdepartment in this department
-            order: { id: "DESC" }, // Order by ID in descending order
+            where: { department: department },
+            order: { id: "DESC" },
           });
 
-          const newId = lastSubDepartment ? lastSubDepartment.id + 1 : 1; // Generate next ID (or start from 1)
+          const newId = lastSubDepartment ? lastSubDepartment.id + 1 : 1;
 
-          // Create the new subdepartment object
           subDepartment = {
-            id: newId, // Use the generated ID
+            id: newId,
             name: subDepartmentData.name,
-            department: department, // Associate with the department
+            department: department,
           } as SubDepartment;
         } else {
-          // Find the existing subdepartment by ID
           subDepartment = await this.subDepartmentRepository.findOne({
             where: { id: subDepartmentData.id },
           });
 
           if (subDepartment) {
-            // Update the existing subdepartment's name
             subDepartment.name = subDepartmentData.name;
           } else {
-            // Handle cases where the ID is invalid or not found
             throw new Error(
               `SubDepartment with ID ${subDepartmentData.id} not found`
             );
@@ -100,10 +91,8 @@ export class DepartmentService {
       })
     );
 
-    // Save the updated subdepartments
     await this.subDepartmentRepository.save(updatedSubDepartments);
 
-    // Save and return the updated department
     return this.departmentRepository.save(department);
   }
 

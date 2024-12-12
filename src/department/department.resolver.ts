@@ -54,7 +54,6 @@ export class DepartmentResolver {
 
   @Mutation(() => Department)
   async deleteDepartment(@Args("id") id: number): Promise<Department> {
-    console.log(id);
     return this.departmentService.deleteDepartment(id);
   }
 }

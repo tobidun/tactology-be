@@ -47,7 +47,6 @@ let DepartmentResolver = class DepartmentResolver {
         return this.departmentService.updateDepartment(input);
     }
     async deleteDepartment(id) {
-        console.log(id);
         return this.departmentService.deleteDepartment(id);
     }
 };

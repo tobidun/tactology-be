@@ -246,6 +246,35 @@ Note: Send auth token from the headers as it it required to create the departmen
 }
 ```
 
+### Edit a department name (Postman Request)
+
+```json
+{
+  "query": "mutation updateDepartment($input: UpdateDepartmentInput!) { updateDepartment(input: $input) { id name } }",
+  "variables": {
+    "input": {
+      "id": 1,
+      "name": "IT Department Updated",
+      "subDepartments": [
+        { "id": "1", "name": "Backend" },
+        { "id": "2", "name": "Frontend" }
+      ]
+    }
+  }
+}
+```
+
+### Delete a department by ID (Postman Request)
+
+```json
+{
+  "query": "mutation deleteDepartment($id: Float!) { deleteDepartment(id: $id) { id } }",
+  "variables": {
+    "id": 1
+  }
+}
+```
+
 ---
 
 ## Deployment
