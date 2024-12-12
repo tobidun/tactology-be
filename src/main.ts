@@ -7,7 +7,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.use(passport.initialize());
   app.enableCors({
-    origin: "http://localhost:3001",
+    origin: ["http://localhost:3001", "https://tactology-fe.vercel.app"],
     credentials: true,
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS",
     allowedHeaders: "Content-Type,Authorization",
