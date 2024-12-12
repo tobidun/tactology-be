@@ -13,5 +13,5 @@ export declare class DepartmentService {
     findAll(userId: number): Promise<Department[]>;
     getDepartmentById(id: number): Promise<Department | null>;
     updateDepartment(input: UpdateDepartmentInput): Promise<Department>;
-    deleteDepartment(id: number): Promise<void>;
+    deleteDepartment(id: number): Promise<Department>;
 }

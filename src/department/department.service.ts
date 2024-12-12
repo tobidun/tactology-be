@@ -107,10 +107,11 @@ export class DepartmentService {
     return this.departmentRepository.save(department);
   }
 
-  async deleteDepartment(id: number): Promise<void> {
+  async deleteDepartment(id: number): Promise<Department> {
     const department = await this.departmentRepository.findById(id);
     if (!department) throw new Error("Department not found");
 
     await this.departmentRepository.removeDepartmentById(id);
+    return department;
   }
 }

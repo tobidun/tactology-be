@@ -85,6 +85,7 @@ let DepartmentService = class DepartmentService {
         if (!department)
             throw new Error("Department not found");
         await this.departmentRepository.removeDepartmentById(id);
+        return department;
     }
 };
 exports.DepartmentService = DepartmentService;
